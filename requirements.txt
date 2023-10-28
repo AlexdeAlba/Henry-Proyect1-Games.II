@@ -1,0 +1,13 @@
+#Requerimientos del proyecto
+# instalacion :  pip install -r requirements.txt
+
+pandas
+matplotlib
+missingno           # Visualizar y analiza datos faltantes (valores nulos) 
+langdetect          #Detecta un idioma
+langid              #Detecta un idioma
+translate
+mtranslate
+textblob            #Analisis de Sentimiento
+fastapi
+jinja2
