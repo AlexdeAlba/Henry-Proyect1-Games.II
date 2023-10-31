@@ -1,13 +1,15 @@
 #Requerimientos del proyecto
 # instalacion :  pip install -r requirements.txt
-
+# Por memoria marque los que no uso en render
 pandas
-matplotlib
-missingno           # Visualizar y analiza datos faltantes (valores nulos) 
-langdetect          #Detecta un idioma
-langid              #Detecta un idioma
-translate
-mtranslate
-textblob            #Analisis de Sentimiento
+#matplotlib
+#missingno           # Visualizar y analiza datos faltantes (valores nulos) 
+#langdetect          #Detecta un idioma
+#langid              #Detecta un idioma
+#translate
+#mtranslate
+#textblob            #Analisis de Sentimiento
 fastapi
 jinja2
+gdown               #Baja Archivos de Google Drive
+uvicorn

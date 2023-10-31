@@ -1,188 +1,60 @@
 from fastapi import FastAPI, Request
+from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
+#from fastapi.responses import PlainTextResponse
+
 import jinja2
 import pandas as pd
+import gdown
 #import ast
 #from pydantic import BaseModel
 
 # --------------------- Leyendo y cargando los archivos csv ----------------------------------------
+
 f_playtimegenre1 = 'data//genre_playtime.csv'
+df1 = pd.read_csv(f_playtimegenre1)
 f_userforgenre2 = 'data//jugador_masminutos.csv'
+df2 = pd.read_csv(f_userforgenre2)
 f_usersrecommend3 = 'data//top_reviews3.csv'
+df3 = pd.read_csv(f_usersrecommend3)
 f_usernotrecommend4 = 'data//top_reviews4.csv'
+df4 = pd.read_csv(f_usernotrecommend4)
 f_sentiment5 = 'data//SentimientoxAño.csv'
+df5 = pd.read_csv(f_sentiment5)
+f_recommend6 = 'data//Recommend.csv '
+#df6 = pd.read_csv(f_recommend6)
 
+f_playtimegenre1 = '1-jSl5Hk6j2xtFuW9i0-GJ527w1mrXpgN'
+f_userforgenre2 = '1-k4MrmQRoBnm34_Ys-AhjjCWxXh7adda'
+f_usersrecommend3 = '1-mKrWZRWlqVDB0DVeI2Ko4ZxxwAsLkdH'
+f_usernotrecommend4 = '1-l77tYd5A59wz4V-39iwzoPT0GCAvnSe'
+f_sentiment5 = '1-oeNsO3GTYS9ShAPqRFvqxUEHspBIzPK'
+f_recomend6 = ' '
 
+""" 
+# Enlace de descarga directa del archivo CSV
+file_url = "https://drive.google.com/uc?id=" + f_playtimegenre1
+gdown.download(file_url, 'genre_playtime.csv', quiet=False)
 
+file_url = "https://drive.google.com/uc?id=" + f_userforgenre2
+gdown.download(file_url, 'jugador_masminutos.csv', quiet=False)
 
+file_url = "https://drive.google.com/uc?id=" + f_usersrecommend3
+gdown.download(file_url, 'top_reviews3.csv', quiet=False)
 
-path = "https://raw.githubusercontent.com/AlexdeAlba/Henry-Proyect1/main/"
+file_url = "https://drive.google.com/uc?id=" + f_usernotrecommend4
+gdown.download(file_url, 'top_reviews4.csv', quiet=False)
 
-# Carga el DataFrame desde un archivo CSV y selecciona solo las columnas especificadas
-columns_to_keep = ['budget', 'id','revenue','title','vote_average','vote_count','release_date','release_year','return']
-#df = pd.read_csv(url, usecols=columns_to_keep)
+file_url = "https://drive.google.com/uc?id=" + f_sentiment5
+gdown.download(file_url, 'SentimientoxAño.csv', quiet=False)
 
-#Lee Movie_clean
-fileName = "movies_clean.csv"
-df = pd.read_csv(path + fileName)
-# Convertir la columna 'release_date' a formato datetime
-df['release_date'] = pd.to_datetime(df['release_date'])
+file_url = "https://drive.google.com/uc?id=" + f_recomend6
+gdown.download(file_url, 'top_reviews3.csv', quiet=False)
+"""
 
-
-#Lee cast 
-fileName = "cast.csv"
-df_cast = pd.read_csv(path + fileName)
-#convertir id en entero y cast a diccionarios
-df_cast['id'] = df_cast['id'].astype(int)
-df_cast['cast'] = df_cast['cast'].apply(ast.literal_eval)
-
-#Lee crew
-fileName = "crew.csv"
-df_crew = pd.read_csv(path + fileName)
-#convertir id en entero y crew a diccionarios
-df_crew['id'] = df_crew['id'].astype(int)
-df_crew['crew'] = df_crew['crew'].apply(ast.literal_eval)
 
 # --------------------------- Manejo de Memoria --------------------------------------------
-
-
-
-
 # ------------------------- Declaracion de la clase movie ------------------------------------
-
-
-
-
-    #-----------------------------------------------
-    #  1.   Cantidad de filamaciones de un mes  
-    #-----------------------------------------------  
-    def cantidad_filmaciones_mes(self,mes):
-        mes_ingles = self.get_mes(mes)
-        if mes_ingles is None:
-            return 'Mes no válido'
-        # Filtrar los registros que correspondan al mes ingresado
-        mask = df['release_date'].dt.month == pd.to_datetime(mes_ingles, format='%B').month
-        peliculas_mes = df.loc[mask]
-        # Obtener la cantidad de películas en el mes
-        cantidad_peliculas_mes = len(peliculas_mes)
-        return cantidad_peliculas_mes
-
-    #-----------------------------------------------
-    # 2. Cantidad de filmaciones en un dia de semana 
-    # (Lunes, Martes, Miercoles etc)
-    #-----------------------------------------------
-    def cantidad_filmaciones_dia(self, dia):
-        dia_semana = self.get_diaSemana(dia)
-        print(dia_semana)
-        peliculas_estreno = df[df['release_date'].dt.weekday == dia_semana]
-        return peliculas_estreno.shape[0]    
-    
-    #-----------------------------------------------
-    # 3. Retorna el título, el año de estreno y el score 
-    #-----------------------------------------------
-    def score_titulo(self, titulo):
-        titulo_low = titulo.lower()
-        movie = df.loc[df['title'] == titulo_low]
-        lista = movie[['title', 'release_year', 'popularity']].values.tolist()[0]
-        return lista
-        
-        
-    #-----------------------------------------------
-    # 4. Retorna Cantidad d votos  y el valor promedio
-    #    de las votaciones 
-    #-----------------------------------------------
-    def votos_titulo(self,titulo):
-        # Filtrar el DataFrame por el título buscado
-        titulo_low = titulo.lower()
-        pelicula = df[df['title'] == titulo_low]
-        # Si lo encuentra
-        if not pelicula.empty: 
-            #peli = pelicula['title'].iloc[0]
-            peli = titulo #Uso titulo para que salga igual al del usuario
-            year = pelicula['release_year'].iloc[0]   
-            votos = pelicula['vote_count'].iloc[0]
-            score = pelicula['vote_average'].iloc[0] 
-            listaReturn = [peli,year,votos,score]
-            return listaReturn
-        else:
-            return None 
-        #f"No se encontro el titulo buscado: {titulo_low}"
-    
-    #-----------------------------------------------
-    # 5. Retorna el exito de un actor medido con el retorno
-    #    ademas cantidad de peliculas y promedio de retorno
-    #-----------------------------------------------
-    def get_actor(self, nombre_actor):
-        ids_peliculas = []
-        #df_cast = read_cast()
-        for index, row in df_cast.iterrows():
-            actores = row['cast']
-            for actor in actores:
-                if actor['name'] == nombre_actor:
-                    ids_peliculas.append(row['id'])
-
-        # Seleccionamos los ids de la lista
-        df_res= df[df['id'].isin(ids_peliculas)]
-        #Numero de peliculas del actor
-        numFilms = df_res.shape[0]
-        # Suma de Ganancias por las peliculas
-        ganancia = df_res['return'].sum()
-        # Promedio por pelicula
-        promedio = ganancia/numFilms
-
-        lista = [numFilms,ganancia,promedio] 
-        #del df_cast        
-        return lista
-    
-  
-    #-----------------------------------------------
-    # 6.Retorna el exito de un director medido con el retorno
-    #    ademas nombre de cada pelicula, fecha de lanzamiento
-    #    costo, ganancia y retorno por pelicula 
-    #-----------------------------------------------   
-    def get_director(self, nombre_director):
-        ids_peliculas = []
-        #df_crew = read_crew()
-        for index, row in df_crew.iterrows():
-            directores = row['crew']
-            for director in directores:
-                if director['name'] == nombre_director and director["job"] == "Director":
-                    ids_peliculas.append(row['id'])
-
-        numPeliculas = len(ids_peliculas)
-        # Seleccionamos los ids de la lista
-        df_res= df[df['id'].isin(ids_peliculas)]
-        columnas = ['title','release_date','revenue','budget','return']
-        df_return = df_res.loc[:,columnas]
-
-        if numPeliculas <= 0:
-            ganancia = 0
-            promedio = 0
-        else:
-            ganancia = df_res['return'].sum()
-            promedio = ganancia/numPeliculas
-        #del df_crew
-        return df_return, nombre_director, ganancia, promedio
-    
-
-    #--------------Complementarias----------------- 
-    #Retona el mes en ingles
-    def get_mes(self, mes):
-        return self.meses.get(mes.lower())
-    
-    #Retorna el dia de la semana en entero
-    # Lunes = 0, etc
-    def get_diaSemana(self,dia):
-        dia_sem = dia.lower()
-        return self.diaSemana.get(dia_sem)
-    
-    
-        
-
-
-#Instanciando la clase
-movi = movie()
-
 # -----------------------------Funciones para FastAPI -----------------------------------------
 
 
@@ -191,52 +63,141 @@ app = FastAPI()
 
 @app.get("/")
 def inicio():
-  return "Proyecto Henry (Movies)"
+    return "Proyecto Henry (Movies)"
 
+# ---------------------------------------------------------------
 # 1.-------------------------------------------------------------
 @app.get("/PlayTimeGenre/{genero}")
-def cantidad_filmaciones_mes(mes=None):
-  cantidad = movi.cantidad_filmaciones_mes(mes)
-  return f"cantidad de filmaciones en el mes de {mes}: {cantidad}"
-
-# 2.-------------------------------------------------------------
-@app.get("/UserForGenre/{genero}")
-def cantidad_filmaciones_dia(dia=None):
-    cant = movi.cantidad_filmaciones_dia(dia)
-    return f"Numero de peliculas estrenadas en {dia}: {cant}"
-
-# 3.-------------------------------------------------------------
-# Retorna el título, el año de estreno y el score
-@app.get("/UsersRecommend/{año}")
-def score_titulo( titulo_de_la_filmacion ):
-    resp = movi.score_titulo(titulo_de_la_filmacion)
-    return f"La Pelicula {titulo_de_la_filmacion} se estreno en {resp[1]} con un score de {resp[2]}"
-
-# 4.-------------------------------------------------------------
-@app.get("/UsersNotRecommend/{año}")
-def votos_titulo(titulo):
-    res = movi.votos_titulo(titulo)
-    if res == None:
-        return f"No se encontraron datos de la pelicula {titulo}"
+def PlayTimeGenre(genero):
+    # Leer el archivo CSV con Pandas
+    df1 = pd.read_csv('genre_playtime.csv')
+    # Cambio a minúsculas
+    genero = genero.lower()
+    filtro = df1[df1['genres'] == genero]
+    
+    if filtro.empty:
+        return -1
     else:
-        return f"La pelicula {res[0]} fue estrenada en {res[1]} con {res[2]} votos y un score de {res[3]}"
+        year = filtro.loc[filtro['hrs_jugadas'].idxmax()]['year']
+        
+    if year != -1:
+         respuesta = f'Año de lanzamiento con más horas jugadas para el género {genero} : {year}'
+    else:
+        respuesta = f"No existen registros para el género '{genero}'"
+    del df1    
 
+    return respuesta
+
+# ---------------------------------------------------------------
+# 2.-------------------------------------------------------------
+# Configura las plantillas de Jinja2
+templates = Jinja2Templates(directory="templates")
+
+@app.get("/UserForGenre/{genero}", response_class=HTMLResponse)
+def UserForGenre(genero:str,request:Request):
+    # Leer el archivo CSV con Pandas
+    df2 = pd.read_csv('jugador_masminutos.csv')
+    gen = genero.capitalize()
+    genero = genero.lower()
+    # Filtrar las filas que corresponden al género dado
+    filtro = df2[df2['genres'] == genero]
+    total = 0
+    if filtro.empty:
+        return templates.TemplateResponse("resultado.html", {"request": request, "usuario_max_horas": "No hay registros para el género dado", "acumulacion_horas": [], "genero": genero})
+
+    # Encontrar al usuario con más horas jugadas
+    usuario_max_horas = filtro.loc[filtro['total_min'].idxmax()]['user_id']
+    usuario_max_horas = usuario_max_horas.upper()
+    # Crear una lista de acumulación de horas jugadas por año
+    acumulacion_horas = []
+    for año, grupo in filtro.groupby('year'):
+        horas_año = grupo['min_jugados'].sum()
+        total = total + horas_año
+        acumulacion_horas.append((año, horas_año))
+
+    # Renderiza el resultado utilizando la plantilla HTML
+    return templates.TemplateResponse("ask2.html", {"request": request, "usuario": usuario_max_horas, "acumulacion": acumulacion_horas, "genero": gen,"total":total})
+
+# ---------------------------------------------------------------
+# 3.-------------------------------------------------------------
+
+
+@app.get("/UsersRecommend/{anio}")
+def UsersRecommend(anio:int):
+    # Leer el archivo CSV con Pandas
+    df3 = pd.read_csv('top_reviews3.csv')
+    
+    # Filtrar las filas que corresponden al año dado
+    filtro = df3[df3['year'] == anio]
+    # filtro = pd.DataFrame() #Declara el df empty
+    res = ""
+
+    if filtro.empty:
+        return  f"No hay registros para el año dado"
+
+    # Ordenar las filas por la columna 'total_review' de manera descendente
+    filtro = filtro.sort_values(by='total_review', ascending=False)
+    
+    # Tomar las tres primeras filas como los juegos más recomendados
+    top_3_juegos = filtro.head(3)
+    
+    # Crear el resultado en una lista de diccionarios
+    resultado = []
+
+    for i, (_, juego) in enumerate(top_3_juegos.iterrows(), start=1):
+        resultado.append({f'Puesto {i}': juego['title']})
+        res += f"Puesto {i}.- {juego['title']}\n"
+    
+    return resultado
+# ---------------------------------------------------------------
+# 4.-------------------------------------------------------------
+@app.get("/UsersNotRecommend/{anio}")
+def UsersNotRecommend(anio:int):
+    df4 = pd.read_csv('top_reviews4.csv')
+    # Filtrar las filas que corresponden al año dado
+    
+    filtro = df4[df4['year'] == anio]
+    
+    if filtro.empty:
+        return "No hay registros para el año dado"
+    
+    # Ordenar las filas por la columna 'false_recommend_count' de manera ascendente
+    filtro = filtro.sort_values(by='false_recommend_count', ascending=True)
+    res = ""
+
+    # Tomar las tres primeras filas como los juegos menos recomendados
+    top_3_juegos = filtro.head(3)
+    
+    # Crear el resultado en una lista de diccionarios
+    resultado = []
+    for i, (_, juego) in enumerate(top_3_juegos.iterrows(), start=1):
+        resultado.append({f'Puesto {i}': juego['title']})
+        res += f"Puesto {i}.- {juego['title']}\n"
+    
+    return resultado
+# ---------------------------------------------------------------
 # 5.-------------------------------------------------------------
-@app.get("/sentiment_analysis/{nombre_actor}")
-def get_actor(actor):
-    res = movi.get_actor(actor)
-    return f"{actor} a realizado {res[0]} filmaciones con un total de ganancias de $ {res[1]:,.2f} y un promedio de $ {res[2]:,.2f} por pelicula"
+@app.get("/sentiment_analysis/{anio}")
+def sentiment_analysis(anio:int):
+    df5 = pd.read_csv('SentimientoxAño.csv')
+    
+    # Filtrar las filas que corresponden al año dado
+    filtro = df5[df5['year'] == anio]
+    
+    if filtro.empty:
+        return "No hay registros para el año dado"
+    
+    # Contar la cantidad de registros en cada categoría de sentimiento
+    negativos = filtro['Negativo'].sum()
+    neutrales = filtro['Neutral'].sum()
+    positivos = filtro['Positivo'].sum()
+    
+    # Crear el resultado en un diccionario
+    resultado = {'Negativos': negativos, 'Neutrales': neutrales, 'Positivos': positivos}
+    res = f'Negativos: {negativos}, Neutrales: {neutrales}, Positivos: {positivos}'
+    return res        
+# ---------------------------------------------------------------
 
 # 6.-------------------------------------------------------------
-@app.get("/recomendacion/{juego}")
-def recomienda(juego):
-s
-
 
 # ---------------------  Inicia el servidor con uvicorn -----------------------------
-
-# Iniciar el servidor de desarrollo con uvicorn
-if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
-    
