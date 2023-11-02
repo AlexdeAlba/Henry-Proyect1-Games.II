@@ -47,7 +47,7 @@ El trabajo se divide en las siguientes etapas:
  #### Archivo:  Steam-Games.csv
  En la primera exploracion se encontraron una gran cantidad de registros nulos que se procedieron a eliminar.
 
- ![Valores Nulos](multimedia/image01.png)
+ ![Valores Nulos]([multimedia/image01.png](https://drive.google.com/file/d/1-rhEVFwwu3OS3sCnZa5aRu2P0dxgBztP/view)
  
  #### Archivo:  Items.csv
  
