@@ -9,6 +9,7 @@ pandas
 #translate
 #mtranslate
 #textblob            #Analisis de Sentimiento
+#scikit-learn
 fastapi
 jinja2
 gdown               #Baja Archivos de Google Drive
