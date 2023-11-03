@@ -44,14 +44,6 @@ El trabajo se divide en las siguientes etapas:
   *  Consistencia de datos
   *  Tratamiento de datos erróneos
  
- #### Archivo:  Steam-Games.csv
- En la primera exploracion se encontraron una gran cantidad de registros nulos que se procedieron a eliminar.
-
- ![image01](https://drive.google.com/file/d/1-rhEVFwwu3OS3sCnZa5aRu2P0dxgBztP/view?usp=sharing)
- 
- #### Archivo:  Items.csv
- 
- #### Archivo:  Reviews.csv
  
 ### 3. Feature Engineering
 Se debe crear una columna llamada 'sentiment_analysis' en el dataset 'user_reviews'. Esta columna aplicará análisis de sentimiento con NLP y utilizará una escala que asigna:
@@ -62,7 +54,7 @@ Se debe crear una columna llamada 'sentiment_analysis' en el dataset 'user_revie
 La nueva columna reemplazará la columna 'user_reviews.review' para facilitar el trabajo de los modelos de machine learning.
 
 ### 4. Desarrollo de la API
-Para proporcionar acceso a las recomendaciones, se propone disponibilizar los datos de la empresa utilizando el framework FastAPI. La API contendrá las siguientes consultas:
+Se propone disponibilizar los datos utilizando el framework FastAPI. La API contendrá las siguientes consultas:
 
 #### Consulta 1: PlayTimeGenre
 ```python
@@ -95,13 +87,13 @@ Para proporcionar acceso a las recomendaciones, se propone disponibilizar los da
 ```
 
 ### 5. Deployment
-La API debe será desplegada para ser accesible desde cualquier dispositivo conectado a internet Render 
-
+La API debe será desplegada para ser accesible desde cualquier dispositivo conectado a internet 
+**[render.com](https://proyecto-01-henry.onrender.com/docs)**
 ### 6. Análisis Exploratorio de los Datos (EDA)
 Después de limpiar los datos, se llevará a cabo un análisis exploratorio para investigar relaciones entre variables, identificar outliers y buscar patrones interesantes.
 
 ### 7. Modelo de Aprendizaje Automático
-Se debe entrenar un modelo de machine learning para desarrollar un sistema de recomendación. Hay dos propuestas: sistema de recomendación ítem-ítem o sistema de recomendación usuario-ítem. El modelo deberá estar disponible a través de la API con las siguientes consultas:
+Se entreno un modelo de machine learning para desarrollar un sistema de recomendación  ítem-ítem o 
 
 #### Consulta: Recomendación de Juego
 ```python
@@ -110,7 +102,7 @@ Se debe entrenar un modelo de machine learning para desarrollar un sistema de re
 ```
 
 ### 8. Video
-Se debe crear un video para mostrar el resultado de las consultas y el funcionamiento del modelo de machine learning. El video no debe durar más de 7 minutos y debe incluir una breve explicación del proyecto, las consultas y el modelo utilizado.
+Video de presentación de utilización de la herramienta el link se proprcionara
 
 
 
