@@ -2,6 +2,11 @@
 # instalacion :  pip install -r requirements.txt
 # Por memoria marque los que no uso en render
 pandas
+fastapi
+jinja2
+gdown               #Baja Archivos de Google Drive
+uvicorn
+pyarrow             # Guardar archivos grandes
 #matplotlib
 #missingno           # Visualizar y analiza datos faltantes (valores nulos) 
 #langdetect          #Detecta un idioma
@@ -10,7 +15,6 @@ pandas
 #mtranslate
 #textblob            #Analisis de Sentimiento
 #scikit-learn
-fastapi
-jinja2
-gdown               #Baja Archivos de Google Drive
-uvicorn
+#seaborn
+#matplotlib
+#scipy

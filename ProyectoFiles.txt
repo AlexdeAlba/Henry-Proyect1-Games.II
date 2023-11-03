@@ -10,3 +10,5 @@ main.py
 05-Transformaciones.ipynb
 06-Funciones.ipynb
 07-Recomendacion.ipynb
+08-Recomendacion.ipynb
+09-Recomendacion.ipynb

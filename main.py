@@ -29,7 +29,8 @@ f_userforgenre2 = '1-k4MrmQRoBnm34_Ys-AhjjCWxXh7adda'
 f_usersrecommend3 = '1-mKrWZRWlqVDB0DVeI2Ko4ZxxwAsLkdH'
 f_usernotrecommend4 = '1-l77tYd5A59wz4V-39iwzoPT0GCAvnSe'
 f_sentiment5 = '1-oeNsO3GTYS9ShAPqRFvqxUEHspBIzPK'
-f_recomend6 = ' '
+f_matriz = ' '
+f_juegos = ' '
 
 """ 
 # Enlace de descarga directa del archivo CSV
@@ -48,8 +49,11 @@ gdown.download(file_url, 'top_reviews4.csv', quiet=False)
 file_url = "https://drive.google.com/uc?id=" + f_sentiment5
 gdown.download(file_url, 'SentimientoxAño.csv', quiet=False)
 
-file_url = "https://drive.google.com/uc?id=" + f_recomend6
-gdown.download(file_url, 'top_reviews3.csv', quiet=False)
+file_url = "https://drive.google.com/uc?id=" + f_matriz
+gdown.download(file_url, 'matriz.csv', quiet=False)
+
+file_url = "https://drive.google.com/uc?id=" + f_juegos
+gdown.download(file_url, 'catalogo_juegos.csv', quiet=False)
 """
 
 
