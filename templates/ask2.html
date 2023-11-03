@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Resultado</title>
+</head>
+<body>
+    <table border="1">
+        <tr>
+            <th>Usuario</th>
+            <th>{{ usuario }}</th>
+        </tr>
+        <tr>
+            <th>Genero</th>
+            <th>{{ genero }}</th>
+        </tr>
+        <tr>
+            <th>minutos jugados</th>
+            <th>{{ total }}</th>
+        </tr>
+        <tr>
+            <th>.</th>
+            <th>.</th>
+        </tr>
+        <tr>
+            <th> Año</th>
+            <th>Minutos</th>
+        </tr>
+        {% for año, horas in acumulacion %}
+            <tr>
+                <td>{{ año }}</td>
+                <td>{{ horas }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>

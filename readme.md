@@ -15,7 +15,7 @@ Este proyecto se enfoca en la solucion de 5 consultas como primera parte del mis
      
 Como segunda parte de este proyecto se ha realizado un sistema de recomendacion de juegos de acuerdo a un juego proporcionado por el usuario. Para este análisis   sa ha utilizado  el nmetodo de **Similitud del Coseno**    basandonos en la biblioteca de Scikit-learn.
 
-Este proyecto es presentando en una API a la cual se podrá accesar por medio de la plataforma **[render.com](https://render.com/)**. Tambien se incluye un video para mostrar el resultado de las consultas propuestas y del modelo ML entrenado **[Vide del proyecto Steam](http://linkgoogle.com)**
+Este proyecto es presentando en una API a la cual se podrá accesar por medio de la plataforma **[render.com](https://proyecto-01-henry.onrender.com/docs)**. Tambien se incluye un video para mostrar el resultado de las consultas propuestas y del modelo ML entrenado **[Vide del proyecto Steam](http://linkgoogle.com)**
 
 ### Propuesta de Trabajo
 
