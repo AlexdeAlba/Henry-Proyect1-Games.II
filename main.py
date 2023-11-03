@@ -35,20 +35,25 @@ f_SistemaRecomendacion = '11-sp9GwZIsDJZRj6TfwBSnhff4Hw6K4z'
 
 
 # Enlace de descarga directa del archivo CSV
-#file_url = "https://drive.google.com/uc?id=" + f_playtimegenre1
-#gdown.download(file_url, 'genre_playtime.csv', quiet=False)
+file_url = "https://drive.google.com/uc?id=" + f_playtimegenre1
+gdown.download(file_url, 'genre_playtime.csv', quiet=False)
+df1 = pd.read_csv('genre_playtime.csv')
 
 file_url = "https://drive.google.com/uc?id=" + f_userforgenre2
 gdown.download(file_url, 'jugador_masminutos.csv', quiet=False)
+df2 = pd.read_csv('jugador_masminutos.csv')
 
 file_url = "https://drive.google.com/uc?id=" + f_usersrecommend3
 gdown.download(file_url, 'top_reviews3.csv', quiet=False)
+df3 = pd.read_csv('top_reviews3.csv')
 
 file_url = "https://drive.google.com/uc?id=" + f_usernotrecommend4
 gdown.download(file_url, 'top_reviews4.csv', quiet=False)
+df4 = pd.read_csv('top_reviews4.csv')
 
 file_url = "https://drive.google.com/uc?id=" + f_sentiment5
 gdown.download(file_url, 'SentimientoxAño.csv', quiet=False)
+df5 = pd.read_csv('SentimientoxAño.csv')
 
 file_url = "https://drive.google.com/uc?id=" + f_matriz
 gdown.download(file_url, 'matriz.csv', quiet=False)
@@ -75,7 +80,7 @@ def inicio():
 @app.get("/PlayTimeGenre/{genero}")
 def PlayTimeGenre(genero):
     # Leer el archivo CSV con Pandas
-    df1 = pd.read_csv('genre_playtime.csv')
+    # df1 = pd.read_csv('genre_playtime.csv')
     # Cambio a minúsculas
     genero = genero.lower()
     filtro = df1[df1['genres'] == genero]
@@ -88,9 +93,7 @@ def PlayTimeGenre(genero):
     if year != -1:
          respuesta = f'Año de lanzamiento con más horas jugadas para el género {genero} : {year}'
     else:
-        respuesta = f"No existen registros para el género '{genero}'"
-    del df1    
-
+        respuesta = f"No existen registros para el género '{genero}'"   
     return respuesta
 
 # ---------------------------------------------------------------
@@ -101,7 +104,7 @@ templates = Jinja2Templates(directory="templates")
 @app.get("/UserForGenre/{genero}", response_class=HTMLResponse)
 def UserForGenre(genero:str,request:Request):
     # Leer el archivo CSV con Pandas
-    df2 = pd.read_csv('jugador_masminutos.csv')
+    # df2 = pd.read_csv('jugador_masminutos.csv')
     gen = genero.capitalize()
     genero = genero.lower()
     # Filtrar las filas que corresponden al género dado
@@ -130,7 +133,7 @@ def UserForGenre(genero:str,request:Request):
 @app.get("/UsersRecommend/{anio}")
 def UsersRecommend(anio:int):
     # Leer el archivo CSV con Pandas
-    df3 = pd.read_csv('top_reviews3.csv')
+    # df3 = pd.read_csv('top_reviews3.csv')
     
     # Filtrar las filas que corresponden al año dado
     filtro = df3[df3['year'] == anio]
@@ -158,7 +161,7 @@ def UsersRecommend(anio:int):
 # 4.-------------------------------------------------------------
 @app.get("/UsersNotRecommend/{anio}")
 def UsersNotRecommend(anio:int):
-    df4 = pd.read_csv('top_reviews4.csv')
+    # df4 = pd.read_csv('top_reviews4.csv')
     # Filtrar las filas que corresponden al año dado
     
     filtro = df4[df4['year'] == anio]
@@ -184,7 +187,7 @@ def UsersNotRecommend(anio:int):
 # 5.-------------------------------------------------------------
 @app.get("/sentiment_analysis/{anio}")
 def sentiment_analysis(anio:int):
-    df5 = pd.read_csv('SentimientoxAño.csv')
+    # df5 = pd.read_csv('SentimientoxAño.csv')
     
     # Filtrar las filas que corresponden al año dado
     filtro = df5[df5['year'] == anio]
@@ -226,10 +229,14 @@ def get_recommendations(game_id, n=5):
             # Seleccionar las primeras n recomendaciones
             top_n_recommendations = recommended_games.head(n)
             
-            return top_n_recommendations
+            # Lo convierto a una lisa
+            game_names = top_n_recommendations['app_name'].tolist()
+
+            return game_names
         else:
             #print(f"El juego con ID {game_id} no se encuentra en la base de datos.")
             return f"El juego con ID {game_id} no se encuentra en la base de datos."
+        
     except Exception as e:
         print(f"Ocurrió un error: {str(e)}")
         return None
