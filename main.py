@@ -209,9 +209,10 @@ def sentiment_analysis(anio:int):
 @app.get("/recomendacion_juego/{game_id}")
 def get_recommendations(game_id, n=5):
     try:
-        # Cargar el DataFrame con la matriz de similitud
+        # Cargar los df con la matriz de similitud
         similarity_matrix = pd.read_parquet('dataRender//matriz.parquet', engine='pyarrow')
-        
+        game_data = pd.read_parquet('dataRender//matriz.parquet', engine='pyarrow')
+
         # Verificar si el juego de entrada (por ID) está en la base de datos
         if game_id in game_data["id"].values:
             # Obtener la fila de similitud para el juego de entrada
