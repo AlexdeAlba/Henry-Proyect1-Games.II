@@ -6,12 +6,13 @@ from fastapi.templating import Jinja2Templates
 import jinja2
 import pandas as pd
 import gdown
+
 #import ast
 #from pydantic import BaseModel
 
 # --------------------- Leyendo y cargando los archivos csv ----------------------------------------
 
-f_playtimegenre1 = 'data//genre_playtime.csv'
+""" f_playtimegenre1 = 'data//genre_playtime.csv'
 df1 = pd.read_csv(f_playtimegenre1)
 f_userforgenre2 = 'data//jugador_masminutos.csv'
 df2 = pd.read_csv(f_userforgenre2)
@@ -22,20 +23,20 @@ df4 = pd.read_csv(f_usernotrecommend4)
 f_sentiment5 = 'data//SentimientoxAño.csv'
 df5 = pd.read_csv(f_sentiment5)
 f_recommend6 = 'data//Recommend.csv '
-#df6 = pd.read_csv(f_recommend6)
+#df6 = pd.read_csv(f_recommend6) """
 
 f_playtimegenre1 = '1-jSl5Hk6j2xtFuW9i0-GJ527w1mrXpgN'
 f_userforgenre2 = '1-k4MrmQRoBnm34_Ys-AhjjCWxXh7adda'
 f_usersrecommend3 = '1-mKrWZRWlqVDB0DVeI2Ko4ZxxwAsLkdH'
 f_usernotrecommend4 = '1-l77tYd5A59wz4V-39iwzoPT0GCAvnSe'
 f_sentiment5 = '1-oeNsO3GTYS9ShAPqRFvqxUEHspBIzPK'
-f_matriz = ' '
-f_juegos = ' '
+f_matriz = '11u-Spfry0hrh6kcdMQivwg_ZiOYOU2Pd'
+f_SistemaRecomendacion = '11-sp9GwZIsDJZRj6TfwBSnhff4Hw6K4z'
 
-""" 
+
 # Enlace de descarga directa del archivo CSV
-file_url = "https://drive.google.com/uc?id=" + f_playtimegenre1
-gdown.download(file_url, 'genre_playtime.csv', quiet=False)
+#file_url = "https://drive.google.com/uc?id=" + f_playtimegenre1
+#gdown.download(file_url, 'genre_playtime.csv', quiet=False)
 
 file_url = "https://drive.google.com/uc?id=" + f_userforgenre2
 gdown.download(file_url, 'jugador_masminutos.csv', quiet=False)
@@ -52,9 +53,9 @@ gdown.download(file_url, 'SentimientoxAño.csv', quiet=False)
 file_url = "https://drive.google.com/uc?id=" + f_matriz
 gdown.download(file_url, 'matriz.csv', quiet=False)
 
-file_url = "https://drive.google.com/uc?id=" + f_juegos
+file_url = "https://drive.google.com/uc?id=" + f_SistemaRecomendacion
 gdown.download(file_url, 'catalogo_juegos.csv', quiet=False)
-"""
+
 
 
 # --------------------------- Manejo de Memoria --------------------------------------------
@@ -201,7 +202,37 @@ def sentiment_analysis(anio:int):
     res = f'Negativos: {negativos}, Neutrales: {neutrales}, Positivos: {positivos}'
     return res        
 # ---------------------------------------------------------------
-
 # 6.-------------------------------------------------------------
+@app.get("/recomendacion_juego/{game_id}")
+def get_recommendations(game_id, n=5):
+    try:
+        # Cargar el DataFrame con la matriz de similitud
+        similarity_matrix = pd.read_parquet('dataRender//matriz.parquet', engine='pyarrow')
+        
+        # Verificar si el juego de entrada (por ID) está en la base de datos
+        if game_id in game_data["id"].values:
+            # Obtener la fila de similitud para el juego de entrada
+            input_game_similarity = similarity_matrix.loc[game_id]
+            
+            # Ordenar los juegos por similitud en orden descendente
+            recommended_games = game_data.iloc[input_game_similarity.argsort()[::-1]]
+            
+            # Eliminar el juego de entrada de las recomendaciones
+            recommended_games = recommended_games[recommended_games["id"] != game_id]
+            
+            # Eliminar recomendaciones duplicadas
+            recommended_games = recommended_games.drop_duplicates(subset="id")
+            
+            # Seleccionar las primeras n recomendaciones
+            top_n_recommendations = recommended_games.head(n)
+            
+            return top_n_recommendations
+        else:
+            #print(f"El juego con ID {game_id} no se encuentra en la base de datos.")
+            return f"El juego con ID {game_id} no se encuentra en la base de datos."
+    except Exception as e:
+        print(f"Ocurrió un error: {str(e)}")
+        return None
+
 
 # ---------------------  Inicia el servidor con uvicorn -----------------------------
